@@ -25,15 +25,15 @@ class UserRegister(Resource):
     argumentos.add_argument("username", type=str, required=True, help="Username obrigatorio")
     argumentos.add_argument("password", type=str, required=True, help="Password obrigatoria")
 
-    def post(self, username):
+    def post(self):
         dados = UserRegister.argumentos.parse_args() # dicionario
-        user = UserModel.find_user(username)
+        user = UserModel.find_user(dados["username"])
         if user:
             return { "message": "User with this username already exists"}
         try:
             new_user = UserModel(**dados)
             new_user.save_user()
-            return new_user.json(), 200
+            return { "message": "User created with success"}
         except:
             return { "message": "Internal error..."}, 500 # internal error
 
